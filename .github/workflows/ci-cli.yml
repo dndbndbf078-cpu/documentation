@@ -29,22 +29,18 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup Git User
         run: |
           git config --global user.email "npm-cli+bot@github.com"
           git config --global user.name "npm CLI robot"
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         id: node
         with:
           node-version: 22.x
           check-latest: contains('22.x', '.x')
           cache: npm
-      - name: Install Latest npm
-        uses: ./.github/actions/install-latest-npm
-        with:
-          node: ${{ steps.node.outputs.node-version }}
       - name: Install Dependencies
         run: npm i --no-audit --no-fund
       - name: Lint
@@ -72,25 +68,23 @@ jobs:
         shell: ${{ matrix.platform.shell }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup Git User
         run: |
           git config --global user.email "npm-cli+bot@github.com"
           git config --global user.name "npm CLI robot"
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         id: node
         with:
           node-version: ${{ matrix.node-version }}
           check-latest: contains(matrix.node-version, '.x')
           cache: npm
-      - name: Install Latest npm
-        uses: ./.github/actions/install-latest-npm
-        with:
-          node: ${{ steps.node.outputs.node-version }}
       - name: Install Dependencies
         run: npm i --no-audit --no-fund
-      - name: Add Problem Matcher
-        run: echo "::add-matcher::.github/matchers/tap.json"
-      - name: Test
+      - name: Test (with coverage on Node >= 24)
+        if: ${{ startsWith(matrix.node-version, '24') }}
+        run: npm run test:cover --ignore-scripts --workspace cli
+      - name: Test (without coverage on Node < 24)
+        if: ${{ !startsWith(matrix.node-version, '24') }}
         run: npm test --ignore-scripts --workspace cli

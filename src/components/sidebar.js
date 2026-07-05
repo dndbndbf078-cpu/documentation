@@ -1,7 +1,8 @@
-import {Box} from '@primer/react'
 import React from 'react'
 import NavItems from './nav-items'
 import {FULL_HEADER_HEIGHT} from '../constants'
+
+import * as styles from './sidebar.module.css'
 
 function usePersistentScroll(id) {
   const ref = React.useRef()
@@ -28,31 +29,19 @@ function usePersistentScroll(id) {
 }
 
 const Sidebar = () => (
-  <Box
-    role="navigation"
-    sx={{
-      position: 'sticky',
+  <nav
+    style={{
       top: `${FULL_HEADER_HEIGHT}px`,
       height: `calc(100vh - ${FULL_HEADER_HEIGHT}px)`,
-      width: 270,
     }}
+    className={styles.Box}
   >
-    <Box
-      {...usePersistentScroll('sidebar')}
-      sx={{
-        overflow: 'auto',
-        borderWidth: 0,
-        borderRightWidth: 1,
-        height: '100%',
-        borderStyle: 'solid',
-        borderColor: 'border.subtle',
-      }}
-    >
-      <Box sx={{display: 'flex', flexDirection: 'column'}}>
+    <div {...usePersistentScroll('sidebar')} className={styles.Box_1}>
+      <div className={styles.Box_2}>
         <NavItems />
-      </Box>
-    </Box>
-  </Box>
+      </div>
+    </div>
+  </nav>
 )
 
 export default Sidebar

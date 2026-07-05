@@ -12,46 +12,41 @@
     "postlint": "template-oss-check",
     "template-oss-apply": "template-oss-apply --force",
     "lintfix": "npm run eslint -- --fix",
-    "snap": "tap",
-    "test": "tap",
+    "snap": "node --test --test-update-snapshots './test/**/*.js'",
+    "test": "node --test './test/**/*.js'",
     "posttest": "npm run lint",
-    "eslint": "eslint \"**/*.{js,cjs,ts,mjs,jsx,tsx}\""
+    "eslint": "eslint \"**/*.{js,cjs,ts,mjs,jsx,tsx}\"",
+    "test:cover": "node --test --experimental-test-coverage --test-timeout=3000 './test/**/*.js'"
   },
   "dependencies": {
     "@octokit/rest": "^22.0.0",
     "@prettier/sync": "^0.6.1",
     "front-matter": "^4.0.2",
-    "minimatch": "^10.0.1",
+    "minimatch": "^10.2.5",
     "minipass": "^7.0.4",
     "pacote": "^21.0.0",
     "proc-log": "^6.0.0",
-    "semver": "^7.5.4",
-    "tar": "^7.0.1",
-    "yaml": "^2.3.4"
+    "semver": "^7.8.2",
+    "tar": "^7.5.16",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@npmcli/eslint-config": "^6.0.0",
-    "@npmcli/template-oss": "4.28.1",
-    "tap": "^21.0.0"
+    "@npmcli/template-oss": "5.1.0"
   },
   "author": "GitHub Inc.",
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=22.9.0"
   },
   "templateOSS": {
     "//@npmcli/template-oss": "This file is partially managed by @npmcli/template-oss. Edits may be overwritten.",
-    "version": "4.28.1",
-    "content": "./scripts/template-oss"
+    "version": "5.1.0",
+    "content": "./scripts/template-oss",
+    "testRunner": "node:test",
+    "coverageThreshold": 0
   },
   "files": [
     "bin/",
     "lib/"
-  ],
-  "tap": {
-    "allow-incomplete-coverage": true,
-    "show-full-coverage": true
-  },
-  "nyc": {
-    "exclude": []
-  }
+  ]
 }

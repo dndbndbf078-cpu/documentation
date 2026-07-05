@@ -1,5 +1,5 @@
 import React from 'react'
-import {Box, Heading, Text} from '@primer/react'
+import {Heading, Text} from '@primer/react'
 import {h1 as H1} from './mdx'
 import PageFooter from './components/page-footer'
 import * as TableOfContents from './components/table-of-contents'
@@ -10,48 +10,42 @@ import usePage from './hooks/use-page'
 import {DarkTheme} from './theme'
 import {SkipNav} from './components/skip-nav'
 
-const Container = ({sx, ...props}) => <Box sx={{width: '100%', maxWidth: '960px', ...sx}} {...props} />
+import * as styles from './layout.module.css'
+import {clsx} from 'clsx'
+
+const Container = ({className, ...props}) => <div className={clsx(styles.Box, className)} {...props} />
 
 const HeroLayout = ({children}) => {
   const {title, description} = useSiteMetadata()
 
   return (
-    <Box as="main" sx={{width: '100%'}}>
-      <DarkTheme sx={{bg: 'canvas.inset', py: [0, 4, 5, 6]}}>
-        <Container sx={{p: 5, mx: 'auto'}}>
-          <Heading as="h1" sx={{color: 'fg.default', fontSize: 7, m: 0}}>
+    <main className={styles.Box_1}>
+      <DarkTheme className={styles.DarkTheme}>
+        <Container className={styles.Container}>
+          <Heading as="h1" className={styles.Heading}>
             {title}
           </Heading>
-          <Text as="p" sx={{m: 0, color: 'fg.onEmphasis', fontSize: 4}}>
+          <Text as="p" className={styles.Text}>
             {description}
           </Text>
         </Container>
       </DarkTheme>
       <SkipNav />
-      <Container sx={{p: 5, mx: 'auto'}}>{children}</Container>
-    </Box>
+      <Container className={styles.Container}>{children}</Container>
+    </main>
   )
 }
 
 const DefaultLayout = ({children}) => {
   const {title, description} = usePage().frontmatter
   return (
-    <Box
-      sx={{
-        justifyContent: 'center',
-        display: 'flex',
-        maxWidth: '1200px',
-        mx: 'auto',
-        width: '100%',
-        p: [4, 5, 6, 7],
-      }}
-    >
+    <div className={styles.Box_2}>
       <Container as="main">
-        <Box sx={{mb: 4}}>
+        <div className={styles.Box_3}>
           <Breadcrumbs />
           <H1 autolink={false}>{title}</H1>
-          {description ? <Box sx={{fontSize: 3, mb: 3}}>{description}</Box> : null}
-        </Box>
+          {description ? <div className={styles.Box_4}>{description}</div> : null}
+        </div>
         <SkipNav />
         <VariantSelect />
         <TableOfContents.Mobile />
@@ -59,7 +53,7 @@ const DefaultLayout = ({children}) => {
         <PageFooter />
       </Container>
       <TableOfContents.Desktop />
-    </Box>
+    </div>
   )
 }
 

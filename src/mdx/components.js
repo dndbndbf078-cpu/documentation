@@ -1,14 +1,16 @@
 import React from 'react'
-import {Box, Heading, themeGet} from '@primer/react'
-import {Octicon} from '@primer/react/deprecated'
+import {Heading} from '@primer/react'
 import styled from 'styled-components'
-import {variant as styledVariant} from 'styled-system'
 import {LinkIcon} from '@primer/octicons-react'
 import textContent from 'react-addons-text-content'
 import {SCROLL_MARGIN_TOP} from '../constants'
 import usePage from '../hooks/use-page'
 import SiteLink, {LinkNoUnderline} from '../components/link'
 import Code from './code'
+
+import * as styles from './components.module.css'
+
+import {clsx} from 'clsx'
 
 export {Code}
 export {default as Index} from './nav-hierarchy'
@@ -20,13 +22,13 @@ const required = (prop, name) => {
   return prop
 }
 
-export const Link = props => <SiteLink underline {...props} />
+export const Link = props => <SiteLink showUnderline {...props} />
 
 const StyledHeading = styled(Heading)`
-  margin-top: ${themeGet('space.4')};
-  margin-bottom: ${themeGet('space.3')};
+  margin-top: 24px;
+  margin-bottom: 16px;
   scroll-margin-top: ${SCROLL_MARGIN_TOP}px;
-  line-height: ${themeGet('lineHeights.condensed')};
+  line-height: 1.25;
 
   @media (hover: hover) {
     & .octicon-link {
@@ -42,18 +44,9 @@ const StyledHeading = styled(Heading)`
 
 const HeaderLink = ({autolink, children, ...props}) =>
   autolink ? (
-    <LinkNoUnderline {...props} sx={{color: 'inherit'}}>
+    <LinkNoUnderline {...props} className={styles.LinkNoUnderline}>
       {children}
-      <Octicon
-        icon={LinkIcon}
-        className="octicon-link"
-        sx={{
-          ml: 2,
-          color: 'fg.muted',
-          // !important is needed here to override default icon styles
-          verticalAlign: 'middle !important',
-        }}
-      />
+      <LinkIcon className={clsx('octicon-link', styles.Octicon)} />
     </LinkNoUnderline>
   ) : (
     children
@@ -92,31 +85,31 @@ const Headings = {
     )
   },
   h1: styled(StyledHeading).attrs({as: 'h1'})`
-    padding-bottom: ${themeGet('space.2')};
-    font-size: ${themeGet('fontSizes.6')};
-    border-bottom: 1px solid ${themeGet('colors.border.default')};
+    padding-bottom: 8px;
+    font-size: 32px;
+    border-bottom: 1px solid var(--borderColor-default, #d1d9e0);
     margin-top: 0;
   `,
   h2: styled(StyledHeading).attrs({as: 'h2'})`
-    padding-bottom: ${themeGet('space.2')};
-    font-size: ${themeGet('fontSizes.4')};
-    border-bottom: 1px solid ${themeGet('colors.border.default')};
-    font-weight: ${themeGet('fontWeights.semibold')};
+    padding-bottom: 8px;
+    font-size: 20px;
+    border-bottom: 1px solid var(--borderColor-default, #d1d9e0);
+    font-weight: 600;
   `,
   h3: styled(StyledHeading).attrs({as: 'h3'})`
-    font-size: ${themeGet('fontSizes.3')};
-    font-weight: ${themeGet('fontWeights.semibold')};
+    font-size: 16px;
+    font-weight: 500;
   `,
   h4: styled(StyledHeading).attrs({as: 'h4'})`
-    font-size: ${themeGet('fontSizes.2')};
-    font-weight: ${themeGet('fontWeights.semibold')};
+    font-size: 14px;
+    font-weight: 500;
   `,
   h5: styled(StyledHeading).attrs({as: 'h5'})`
-    font-size: ${themeGet('fontSizes.1')};
+    font-size: 12px;
   `,
   h6: styled(StyledHeading).attrs({as: 'h6'})`
-    font-size: ${themeGet('fontSizes.1')};
-    color: ${themeGet('colors.fg.muted')};
+    font-size: 12px;
+    color: var(--fgColor-muted);
   `,
   wrap(as) {
     return props => <Headings.Markdown as={Headings[as]} {...props} />
@@ -131,10 +124,10 @@ export const H5 = Headings.wrap('h4')
 export const H6 = Headings.wrap('h5')
 
 export const Blockquote = styled.blockquote`
-  margin: 0 0 ${themeGet('space.3')};
-  padding: 0 ${themeGet('space.3')};
-  color: ${themeGet('colors.fg.muted')};
-  border-left: 0.25em solid ${themeGet('colors.border.default')};
+  margin: 0 0 16px;
+  padding: 0 16px;
+  color: var(--fgColor-muted);
+  border-left: 0.25em solid var(--borderColor-default);
 
   > :first-child {
     margin-top: 0;
@@ -150,23 +143,23 @@ export const DescriptionList = styled.dl`
 
   dt {
     padding: 0;
-    margin-top: ${themeGet('space.3')};
+    margin-top: 16px;
     font-size: 1em;
     font-style: italic;
-    font-weight: ${themeGet('fontWeights.bold')};
+    font-weight: 600;
   }
 
   dd {
-    padding: 0 ${themeGet('space.3')};
-    margin: 0 0 ${themeGet('space.3')};
+    padding: 0 16px;
+    margin: 0 0 16px;
   }
 `
 
 export const HorizontalRule = styled.hr`
-  height: ${themeGet('borderWidths.1')};
+  height: 1px;
   padding: 0;
-  margin: ${themeGet('space.4')} 0;
-  background-color: ${themeGet('colors.border.default')};
+  margin: 24px 0;
+  background-color: var(--borderColor-muted, #d1d9e0);
   border: 0;
 `
 
@@ -184,67 +177,96 @@ export const UnorderedList = styled.ul`
   }
 
   li > p {
-    margin-top: ${themeGet('space.3')};
+    margin-top: 16px;
   }
 
   li + li {
-    margin-top: ${themeGet('space.1')};
+    margin-top: 4px;
   }
 `
 
 export const OrderedList = UnorderedList.withComponent('ol')
 
 export const Paragraph = styled.p`
-  margin: 0 0 ${themeGet('space.3')};
+  margin: 0 0 16px;
   word-break: break-word;
 `
 
 export const Table = styled.table`
   display: block;
   width: 100%;
-  margin: 0 0 ${themeGet('space.3')};
+  margin: 0 0 16px;
   overflow: auto;
   border-collapse: separate;
   border-spacing: 0px;
 
   th {
-    font-weight: ${themeGet('fontWeights.bold')};
-    background-color: ${themeGet('colors.neutral.subtle')};
+    font-weight: 600;
+    background-color: var(--bgColor-neutral-muted, #afb8c133);
   }
 
   th,
   td {
-    padding: ${themeGet('space.2')} ${themeGet('space.3')};
-    border-color: ${themeGet('colors.border.muted')};
+    padding: 8px 16px;
+    border-color: var(--borderColor-muted, #d0d7de);
     border-style: solid;
     border-width: 0;
-    border-left-width: ${themeGet('borderWidths.1')};
-    border-top-width: ${themeGet('borderWidths.1')};
+    border-left-width: 1px;
+    border-top-width: 1px;
+  }
+
+  td code,
+  th code {
+    white-space: nowrap;
+  }
+
+  td a {
+    color: var(--fgColor-default, #1f2328);
+    text-decoration: underline;
+  }
+
+  td a:hover {
+    text-decoration: none;
+  }
+
+  td code a,
+  td a code {
+    color: var(--fgColor-default, #1f2328);
+    text-decoration: underline;
+    font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);
+    background-color: var(--bgColor-neutral-muted, #afb8c133);
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+
+  td code a:hover,
+  td a code:hover {
+    text-decoration: none;
   }
 
   tr:last-child td {
-    border-bottom-width: ${themeGet('borderWidths.1')};
+    border-bottom-width: 1px;
   }
 
   tr td:last-child,
   tr th:last-child {
-    border-right-width: ${themeGet('borderWidths.1')};
+    border-right-width: 1px;
   }
 
   thead th:first-child {
-    border-top-left-radius: ${themeGet('radii.2')};
+    border-top-left-radius: 6px;
   }
 
   thead th:last-child {
-    border-top-right-radius: ${themeGet('radii.2')};
+    border-top-right-radius: 6px;
   }
 
   tbody tr:last-child td:last-child {
-    border-bottom-right-radius: ${themeGet('radii.2')};
+    border-bottom-right-radius: 6px;
   }
 
   tbody tr:last-child td:first-child {
-    border-bottom-left-radius: ${themeGet('radii.2')};
+    border-bottom-left-radius: 6px;
   }
 
   img {
@@ -254,34 +276,32 @@ export const Table = styled.table`
 `
 
 const StyledNote = styled.div`
-  padding: ${themeGet('space.3')};
-  margin-bottom: ${themeGet('space.3')};
-  border-radius: ${themeGet('radii.2')};
-  border-left: ${themeGet('radii.2')} solid;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+  border-left: 6px solid;
 
   & *:last-child {
     margin-bottom: 0;
   }
 
-  ${styledVariant({
-    variants: {
-      info: {
-        borderColor: 'accent.muted',
-        bg: 'accent.subtle',
-      },
-      warning: {
-        borderColor: 'attention.muted',
-        bg: 'attention.subtle',
-      },
-      danger: {
-        borderColor: 'danger.muted',
-        bg: 'danger.subtle',
-      },
-    },
-  })}
+  &[data-variant='info'] {
+    border-left-color: var(--borderColor-accent-muted, #54aeff);
+    background-color: var(--bgColor-accent-subtle, #ddf4ff);
+  }
+
+  &[data-variant='warning'] {
+    border-left-color: var(--borderColor-attention-muted, #d4a72c);
+    background-color: var(--bgColor-attention-subtle, #fff8c5);
+  }
+
+  &[data-variant='danger'] {
+    border-left-color: var(--borderColor-danger-muted, #ff8182);
+    background-color: var(--bgColor-danger-subtle, #ffebe9);
+  }
 `
 
-export const Note = ({variant = 'info', ...props}) => <StyledNote variant={variant} {...props} />
+export const Note = ({variant = 'info', ...props}) => <StyledNote data-variant={variant} {...props} />
 
 export const Prompt = props => <Code prompt={true} {...props} />
 
@@ -293,21 +313,76 @@ export const Image = styled(RequiredImage)`
 `
 
 export const Screenshot = styled(RequiredImage)`
-  margin-top: ${themeGet('space.3')};
-  margin-bottom: ${themeGet('space.3')};
+  margin-top: 16px;
+  margin-bottom: 16px;
   max-width: min(100%, 525px);
   max-height: 300px;
-  border: 1px solid ${themeGet('colors.border.default')};
+  border: 1px solid var(--borderColor-default);
   display: block;
 `
 
 export const YouTube = ({id}) => (
-  <Box
-    as="iframe"
-    sx={{aspectRatio: '16 / 9', width: '100%'}}
+  <iframe
     title="YouTube video"
     src={`https://www.youtube.com/embed/${id}`}
     frameBorder="0"
     allowFullScreen
+    className={styles.Box}
   />
 )
+
+export const InlineCode = styled.code`
+  font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace);
+  background-color: var(--bgColor-neutral-muted, #afb8c133);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 85%;
+`
+
+export const Strikethrough = styled.span`
+  text-decoration: line-through;
+`
+
+const Thead = styled.thead``
+const Tbody = styled.tbody``
+const Tr = styled.tr``
+const Th = styled.th``
+const Td = styled.td``
+
+export const DataTable = ({headers, rows, align}) => {
+  const getAlign = index => {
+    if (!align) return undefined
+    const a = align[index]
+    if (a === 'l') return 'left'
+    if (a === 'r') return 'right'
+    if (a === 'c') return 'center'
+    return a
+  }
+
+  return (
+    <Table>
+      {headers && (
+        <Thead>
+          <Tr>
+            {headers.map((header, i) => (
+              <Th key={i} style={{textAlign: getAlign(i)}}>
+                {header}
+              </Th>
+            ))}
+          </Tr>
+        </Thead>
+      )}
+      <Tbody>
+        {rows.map((row, rowIndex) => (
+          <Tr key={rowIndex}>
+            {row.map((cell, cellIndex) => (
+              <Td key={cellIndex} style={{textAlign: getAlign(cellIndex)}}>
+                {cell}
+              </Td>
+            ))}
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+  )
+}
